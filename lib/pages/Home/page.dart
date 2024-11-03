@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -100,6 +102,33 @@ class ProofCard extends StatefulWidget {
 }
 
 class _ProofCard extends State<ProofCard> {
+  double turns = 0.0;
+  Timer? _debounceTimer;
+
+  void reloadTap() {
+    if (_debounceTimer?.isActive ?? false) {
+      return;
+    }
+    setState(() {
+      turns += 1.0;
+    });
+    _debounceTimer = Timer(const Duration(seconds: 1), () {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      turns = 0.0;
+    });
+  }
+
+  @override
+  void dispose() {
+    _debounceTimer?.cancel(); // 清理计时器
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -117,7 +146,7 @@ class _ProofCard extends State<ProofCard> {
                   children: [
                     Row(
                       children: [
-                        Text("POR (Proof of Reserve a)",
+                        Text("POR (Proof of Reserve)",
                             style: TextStyle(
                                 color: HexColor("#3D3D3D"),
                                 fontWeight: FontWeight.w700,
@@ -147,7 +176,24 @@ class _ProofCard extends State<ProofCard> {
                           fontSize: 12,
                           fontWeight: FontWeight.w700),
                     ),
-                    
+                    GestureDetector(
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 8),
+                        child: AnimatedRotation(
+                          turns: turns,
+                          duration: const Duration(seconds: 1),
+                          curve: Curves.easeInOut,
+                          child: SvgPicture.asset(
+                            "assets/images/reload.svg",
+                            width: 16,
+                            height: 16,
+                          ),
+                        ),
+                      ),
+                      onTap: () {
+                        reloadTap();
+                      },
+                    ),
                   ],
                 )
               ]))),
