@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -167,36 +169,108 @@ class _ProofCard extends State<ProofCard> {
                     )
                   ],
                 ),
-                Row(
-                  children: [
-                    Text(
-                      "Until 01/July, 2024",
-                      style: TextStyle(
-                          color: HexColor("#525252"),
-                          fontSize: 12,
-                          fontWeight: FontWeight.w700),
-                    ),
-                    GestureDetector(
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 8),
-                        child: AnimatedRotation(
-                          turns: turns,
-                          duration: const Duration(seconds: 1),
-                          curve: Curves.easeInOut,
-                          child: SvgPicture.asset(
-                            "assets/images/reload.svg",
-                            width: 16,
-                            height: 16,
-                          ),
+                Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    child: Row(
+                      children: [
+                        Text(
+                          "Until 01/July, 2024",
+                          style: TextStyle(
+                              color: HexColor("#525252"),
+                              fontSize: 12,
+                              fontWeight: FontWeight.w700),
                         ),
-                      ),
-                      onTap: () {
-                        reloadTap();
-                      },
-                    ),
-                  ],
-                )
+                        GestureDetector(
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 8),
+                            child: AnimatedRotation(
+                              turns: turns,
+                              duration: const Duration(seconds: 1),
+                              curve: Curves.easeInOut,
+                              child: SvgPicture.asset(
+                                "assets/images/reload.svg",
+                                width: 13,
+                                height: 13,
+                              ),
+                            ),
+                          ),
+                          onTap: () {
+                            reloadTap();
+                          },
+                        ),
+                      ],
+                    )),
+                Text(
+                  "New/locked real assets are updated/updated monthly and disclosed, through authoritative auditing institutions",
+                  style: TextStyle(
+                      color: HexColor("#707070"),
+                      fontSize: 10,
+                      fontWeight: FontWeight.w400),
+                ),
+                ChatView()
               ]))),
     );
+  }
+}
+
+class ChatView extends StatefulWidget {
+  @override
+  _ChatViewState createState() => _ChatViewState();
+}
+
+class _ChatViewState extends State<ChatView> {
+  var activeIndex = 0;
+  final tabs = ['Scale', 'Market'];
+  void setIndexSelect(String tab) {
+    setState(() {
+      if (tab == 'Scale')
+        activeIndex = 0;
+      else
+        activeIndex = 1;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        alignment: Alignment.centerLeft,
+        child: IntrinsicWidth(
+          child: Container(
+            height: 28,
+            margin: const EdgeInsets.only(top: 24, bottom: 12),
+            decoration: BoxDecoration(
+              color: HexColor("#F5F5F5"),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Row(
+                children: List.generate(
+                    tabs.length,
+                    (index) => GestureDetector(
+                          onTap: () {
+                            setIndexSelect(tabs[index]);
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 12),
+                            decoration: BoxDecoration(
+                                color: activeIndex == index
+                                    ? HexColor("#3D3D3D")
+                                    : HexColor("#F5F5F5"),
+                                borderRadius:
+                                    const BorderRadius.all(Radius.circular(8)),
+                                border: Border.all(color: Colors.transparent)),
+                            child: Text(
+                              tabs[index],
+                              style: TextStyle(
+                                  color: activeIndex == index
+                                      ? Colors.white
+                                      : HexColor("#3D3D3D"),
+                                  fontSize: 14,
+                                  height: 1.8,
+                                  fontWeight: FontWeight.w500),
+                            ),
+                          ),
+                        ))),
+          ),
+        ));
   }
 }
