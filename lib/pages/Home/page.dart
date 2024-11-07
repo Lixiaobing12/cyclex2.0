@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_application_1/Components/Charts/homeLineCharts.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -207,7 +208,8 @@ class _ProofCard extends State<ProofCard> {
                       fontSize: 10,
                       fontWeight: FontWeight.w400),
                 ),
-                ChatView()
+                ChatView(),
+                const LineChartSample2()
               ]))),
     );
   }
